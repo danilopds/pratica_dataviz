@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Vendas — Olist | SP Capital 2017 &lt; R$500 (ApexCharts)</title>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<style>
+  *{box-sizing:border-box} body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6fb;color:#1e2a3a}
+  header{background:#0f2a44;color:#fff;padding:28px 24px}
+  header h1{margin:0 0 6px;font-size:24px} header p{margin:0;opacity:.85}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
+  .kpi{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .kpi small{color:#64748b} .kpi b{font-size:22px;display:block;margin-top:4px}
+  .card{background:#fff;border-radius:12px;padding:18px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .card h2{margin:0 0 4px;font-size:18px} .card p{margin:0 0 12px;color:#64748b;font-size:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:right} th:first-child,td:first-child{text-align:left}
+  footer{color:#64748b;font-size:12px;padding:20px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>Relatório de Vendas — Olist (ApexCharts)</h1>
+  <p>Foco: valor do item &lt; R$500 • São Paulo capital (sao paulo/SP) • 2017 • Fonte: <code>modelagens/FATO_VENDAS.csv</code> + <code>DIM_PRODUTO.csv</code></p>
+</header>
+<div class="wrap">
+  <div class="kpis">
+    <div class="kpi"><small>Pedidos (recorte)</small><b>6,118</b></div>
+    <div class="kpi"><small>Itens vendidos</small><b>7,090</b></div>
+    <div class="kpi"><small>Receita (preço+frete)</small><b>R$ 717,617.11</b></div>
+    <div class="kpi"><small>Ticket médio / pedido</small><b>R$ 117.30</b></div>
+    <div class="kpi"><small>Frete médio / item</small><b>R$ 13.74</b></div>
+    <div class="kpi"><small>Brasil 2017 &lt;500 (pedidos)</small><b>43,009</b></div>
+  </div>
+
+  <div class="card">
+    <h2>1. Evolução mensal — linha</h2>
+    <p>Receita mensal (R$, eixo esquerdo) e nº de pedidos (eixo direito). Grão da fato: 1 item por linha.</p>
+    <div id="chLinha"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>2. Top categorias — barras</h2>
+      <p>Top 10 <code>categoria_pt</code> por receita no recorte.</p>
+      <div id="chBarCat"></div>
+    </div>
+    <div class="card">
+      <h2>3. Vendas por pagamento — barras</h2>
+      <p>Pedidos por <code>tipo_pagamento</code> no recorte.</p>
+      <div id="chBarPag"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>4. Perfil SP capital vs Brasil — radar</h2>
+    <p>Comparativo 2017 &lt;R$500 normalizado 0–100. Reais SP: 117.3, 13.74, 13.58, 2.67, 1.16 | Brasil: 130.27, 18.48, 16.23, 3.08, 1.14</p>
+    <div id="chRadar"></div>
+  </div>
+
+  <div class="card">
+    <h2>Detalhamento mensal</h2>
+    <table><thead><tr><th>Mês</th><th>Pedidos</th><th>Itens</th><th>Receita (R$)</th></tr></thead>
+    <tbody><tr><td>Jan</td><td>91</td><td>113</td><td>11,017.27</td></tr><tr><td>Fev</td><td>219</td><td>239</td><td>23,993.17</td></tr><tr><td>Mar</td><td>363</td><td>419</td><td>43,211.06</td></tr><tr><td>Abr</td><td>283</td><td>311</td><td>33,807.48</td></tr><tr><td>Mai</td><td>498</td><td>579</td><td>58,374.30</td></tr><tr><td>Jun</td><td>460</td><td>510</td><td>53,594.81</td></tr><tr><td>Jul</td><td>522</td><td>623</td><td>62,297.88</td></tr><tr><td>Ago</td><td>623</td><td>717</td><td>68,119.59</td></tr><tr><td>Set</td><td>567</td><td>661</td><td>68,624.49</td></tr><tr><td>Out</td><td>599</td><td>718</td><td>72,782.91</td></tr><tr><td>Nov</td><td>1073</td><td>1259</td><td>123,801.14</td></tr><tr><td>Dez</td><td>820</td><td>941</td><td>97,993.01</td></tr></tbody></table>
+  </div>
+</div>
+<footer>Gerado a partir de modelagens/DIM_*.csv e FATO_VENDAS.csv • Grão: 1 item/pedido • Filtros: vl_total_item&lt;500, cidade='sao paulo', estado='SP', ano=2017 • ApexCharts</footer>
+<script>
+const D = {"meses": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"], "mensal_pedidos": [91, 219, 363, 283, 498, 460, 522, 623, 567, 599, 1073, 820], "mensal_receita": [11017.27, 23993.17, 43211.06, 33807.48, 58374.3, 53594.81, 62297.88, 68119.59, 68624.49, 72782.91, 123801.14, 97993.01], "topcat_labels": ["cama_mesa_banho", "esporte_lazer", "informatica_acessorios", "moveis_decoracao", "beleza_saude", "brinquedos", "utilidades_domesticas", "perfumaria", "relogios_presentes", "cool_stuff"], "topcat_receita": [82693.63, 58313.61, 53735.51, 53164.7, 52466.51, 38476.58, 38397.13, 34204.91, 34161.68, 29525.02], "pag_labels": ["credit_card", "boleto", "voucher", "debit_card"], "pag_pedidos": [4745, 1145, 133, 95], "pag_receita": [568831.08, 128242.58, 11949.04, 8594.41], "radar_labels": ["Ticket medio", "Frete medio", "% frete/total", "Parcelas medias", "Itens por pedido"], "sp_norm": [90.0, 74.4, 83.6, 86.8, 100.0], "br_norm": [100.0, 100.0, 100.0, 100.0, 98.7], "sp_raw": [117.3, 13.74, 13.58, 2.67, 1.16], "br_raw": [130.27, 18.48, 16.23, 3.08, 1.14]};
+new ApexCharts(document.querySelector("#chLinha"), {
+  chart:{type:'line', height:340, toolbar:{show:true}},
+  stroke:{curve:'smooth', width:[3,3]},
+  series:[{name:'Receita (R$)', data:D.mensal_receita}, {name:'Pedidos', data:D.mensal_pedidos}],
+  xaxis:{categories:D.meses},
+  yaxis:[{title:{text:'Receita (R$)'}}, {opposite:true, title:{text:'Pedidos'}}],
+  tooltip:{shared:true}
+}).render();
+new ApexCharts(document.querySelector("#chBarCat"), {
+  chart:{type:'bar', height:380, toolbar:{show:true}},
+  plotOptions:{bar:{horizontal:true, borderRadius:4}},
+  dataLabels:{enabled:false},
+  series:[{name:'Receita (R$)', data:D.topcat_receita}],
+  xaxis:{categories:D.topcat_labels},
+  tooltip:{y:{formatter:v=>'R$ '+v.toLocaleString('pt-BR')}}
+}).render();
+new ApexCharts(document.querySelector("#chBarPag"), {
+  chart:{type:'bar', height:340, toolbar:{show:true}},
+  plotOptions:{bar:{borderRadius:6, columnWidth:'55%'}},
+  dataLabels:{enabled:false},
+  series:[{name:'Pedidos', data:D.pag_pedidos}, {name:'Receita (R$)', data:D.pag_receita}],
+  xaxis:{categories:D.pag_labels}
+}).render();
+new ApexCharts(document.querySelector("#chRadar"), {
+  chart:{type:'radar', height:380, toolbar:{show:true}},
+  series:[{name:'SP capital', data:D.sp_norm}, {name:'Brasil', data:D.br_norm}],
+  xaxis:{categories:D.radar_labels},
+  yaxis:{min:0, max:100, tickAmount:5},
+  fill:{opacity:0.25}
+}).render();
+</script>
+</body>
+</html>

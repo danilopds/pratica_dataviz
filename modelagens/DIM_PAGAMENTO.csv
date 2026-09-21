@@ -1,0 +1,6 @@
+id_pagamento,tipo_pagamento
+1,boleto
+2,credit_card
+3,debit_card
+4,not_defined
+5,voucher
